@@ -284,7 +284,7 @@ class hashwrapper
 			 * read the file in 1024b blocks and
 			 * update the context for every block
 			 */
-			while( (len = static_cast<unsigned int>(fread(buffer,1,1024,file))) )
+			while( (len = static_cast<unsigned int>(fread(buffer,1,1024,file))) > 0 )
 			{
 				updateContext(buffer, len);
 			}
