@@ -217,10 +217,12 @@ class hashwrapper
 			 */
 			resetContext();
 
+			const auto size = static_cast<unsigned int>(text.length());
+
 			/*
 			 * we update the context with the given text
 			 */
-			updateContext((unsigned char*) text.c_str(),text.length());
+			updateContext((unsigned char*) text.c_str(), size);
 
 			/*
 			 * now we can close the hash process 
@@ -249,7 +251,7 @@ class hashwrapper
 		virtual std::string getHashFromFile(std::string filename)
 		{
 			FILE *file;
-			int len;
+			unsigned int len;
 			unsigned char buffer[1024];
 
 			/*
@@ -260,6 +262,7 @@ class hashwrapper
 			/*
 			 * open the specified file
 			 */
+			#ifndef _WIN32
 			if((file = fopen(filename.c_str(), "rb")) == NULL)
 			{
 				throw hlException(HL_FILE_READ_ERROR,
@@ -267,12 +270,21 @@ class hashwrapper
 						  filename + 
 						  "\".");
 			}
+			#else
+			if (fopen_s(&file, filename.c_str(), "rb") != 0)
+			{
+				throw hlException(HL_FILE_READ_ERROR,
+						  "Cannot read file \"" +
+						  filename +
+						  "\".");
+			}
+			#endif
 
 			/*
 			 * read the file in 1024b blocks and
 			 * update the context for every block
 			 */
-			while( (len = fread(buffer,1,1024,file)) )
+			while( (len = static_cast<unsigned int>(fread(buffer,1,1024,file))) )
 			{
 				updateContext(buffer, len);
 			}
