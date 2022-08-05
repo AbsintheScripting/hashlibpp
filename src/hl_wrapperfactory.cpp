@@ -85,28 +85,23 @@ hashwrapper* wrapperfactory::create(HL_Wrappertype type)
  */
 hashwrapper* wrapperfactory::create(std::string type)
 {
- 	std::transform(type.begin(), type.end(), type.begin(), ::toupper);
-	if(type == "MD5")
+	std::transform(type.begin(), type.end(), type.begin(), [](unsigned char const& ch)
 	{
+		return static_cast<unsigned char>(::toupper(ch));
+	});
+
+	if (type == "MD5")
 		return new md5wrapper();
-	}
-	else if(type == "SHA1")
-	{
+	if (type == "SHA1")
 		return new sha1wrapper();
-	}
-	else if(type == "SHA256")
-	{
+	if (type == "SHA256")
 		return new sha256wrapper();
-	}
-	else if(type == "SHA384")
-	{
+	if (type == "SHA384")
 		return new sha384wrapper();
-	}
-	else if(type == "SHA512")
-	{
+	if (type == "SHA512")
 		return new sha512wrapper();
-	}
-	return NULL;
+
+	return nullptr;
 }
 
 //---------------------------------------------------------------------- 
