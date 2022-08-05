@@ -162,7 +162,7 @@ static const char *sha2_hex_digits = "0123456789abcdef";
  */  
 void SHA2ext::SHA512_Init(HL_SHA512_CTX* context) 
 {
-	if (context == (HL_SHA512_CTX*)0) {
+	if (context == static_cast<HL_SHA512_CTX*>(0)) {
 		return;
 	}
 	MEMCPY_BCOPY(context->state, sha512_initial_hash_value, SHA512_DIGEST_LENGTH);
@@ -357,7 +357,7 @@ void SHA2ext::SHA512_Update(HL_SHA512_CTX* context, const sha2_byte *data, unsig
 	}
 
 	/* Sanity check: */
-	assert(context != (HL_SHA512_CTX*)0 && data != (sha2_byte*)0);
+	assert(context != static_cast<HL_SHA512_CTX*>(0) && data != static_cast<sha2_byte*>(0));
 
 	usedspace = (context->bitcount[0] >> 3) % SHA512_BLOCK_LENGTH;
 	if (usedspace > 0) {
@@ -443,10 +443,10 @@ void SHA2ext::SHA512_Final(sha2_byte digest[], HL_SHA512_CTX* context)
 	sha2_word64	*d = (sha2_word64*)digest;
 
 	/* Sanity check: */
-	assert(context != (HL_SHA512_CTX*)0);
+	assert(context != static_cast<HL_SHA512_CTX*>(0));
 
 	/* If no digest buffer is passed, we don't bother doing this: */
-	if (digest != (sha2_byte*)0) {
+	if (digest != static_cast<sha2_byte*>(0)) {
 		SHA512_Last(context);
 
 		/* Save the hash data for output: */
@@ -474,9 +474,9 @@ char* SHA2ext::SHA512_End(HL_SHA512_CTX* context, char buffer[])
 	int		i;
 
 	/* Sanity check: */
-	assert(context != (HL_SHA512_CTX*)0);
+	assert(context != static_cast<HL_SHA512_CTX*>(0));
 
-	if (buffer != (char*)0) {
+	if (buffer != static_cast<char*>(0)) {
 		SHA512_Final(digest, context);
 
 		for (i = 0; i < SHA512_DIGEST_LENGTH; i++) {
@@ -484,7 +484,7 @@ char* SHA2ext::SHA512_End(HL_SHA512_CTX* context, char buffer[])
 			*buffer++ = sha2_hex_digits[*d & 0x0f];
 			d++;
 		}
-		*buffer = (char)0;
+		*buffer = static_cast<char>(0);
 	} else {
 		MEMSET_BZERO(context, sizeof(context));
 	}
@@ -494,7 +494,7 @@ char* SHA2ext::SHA512_End(HL_SHA512_CTX* context, char buffer[])
 
 void SHA2ext::SHA384_Init(HL_SHA_384_CTX* context) 
 {
-	if (context == (HL_SHA_384_CTX*)0) {
+	if (context == static_cast<HL_SHA_384_CTX*>(0)) {
 		return;
 	}
 	MEMCPY_BCOPY(context->state, sha384_initial_hash_value, SHA512_DIGEST_LENGTH);
@@ -512,10 +512,10 @@ void SHA2ext::SHA384_Final(sha2_byte digest[], HL_SHA_384_CTX* context)
 	sha2_word64	*d = (sha2_word64*)digest;
 
 	/* Sanity check: */
-	assert(context != (HL_SHA_384_CTX*)0);
+	assert(context != static_cast<HL_SHA_384_CTX*>(0));
 
 	/* If no digest buffer is passed, we don't bother doing this: */
-	if (digest != (sha2_byte*)0) {
+	if (digest != static_cast<sha2_byte*>(0)) {
 		SHA512_Last((HL_SHA512_CTX*)context);
 
 		/* Save the hash data for output: */
@@ -543,9 +543,9 @@ char* SHA2ext::SHA384_End(HL_SHA_384_CTX* context, char buffer[])
 	int		i;
 
 	/* Sanity check: */
-	assert(context != (HL_SHA_384_CTX*)0);
+	assert(context != static_cast<HL_SHA_384_CTX*>(0));
 
-	if (buffer != (char*)0) {
+	if (buffer != static_cast<char*>(0)) {
 		SHA384_Final(digest, context);
 
 		for (i = 0; i < SHA384_DIGEST_LENGTH; i++) {
@@ -553,7 +553,7 @@ char* SHA2ext::SHA384_End(HL_SHA_384_CTX* context, char buffer[])
 			*buffer++ = sha2_hex_digits[*d & 0x0f];
 			d++;
 		}
-		*buffer = (char)0;
+		*buffer = static_cast<char>(0);
 	} else {
 		MEMSET_BZERO(context, sizeof(context));
 	}

@@ -134,7 +134,7 @@ static const char *sha2_hex_digits = "0123456789abcdef";
  *  @param	context The context to init.
  */  
 void SHA256::SHA256_Init(HL_SHA256_CTX* context) {
-	if (context == (HL_SHA256_CTX*)0) {
+	if (context == static_cast<HL_SHA256_CTX*>(0)) {
 		return;
 	}
 	MEMCPY_BCOPY(context->state, sha256_initial_hash_value, SHA256_DIGEST_LENGTH);
@@ -342,7 +342,7 @@ void SHA256::SHA256_Update(HL_SHA256_CTX* context, const sha2_byte *data, unsign
 	}
 
 	/* Sanity check: */
-	assert(context != (HL_SHA256_CTX*)0 && data != (sha2_byte*)0);
+	assert(context != static_cast<HL_SHA256_CTX*>(0) && data != static_cast<sha2_byte*>(0));
 
 	usedspace = (context->bitcount >> 3) % SHA256_BLOCK_LENGTH;
 	if (usedspace > 0) {
@@ -391,10 +391,10 @@ void SHA256::SHA256_Final(sha2_byte digest[], HL_SHA256_CTX* context) {
 	unsigned int	usedspace;
 
 	/* Sanity check: */
-	assert(context != (HL_SHA256_CTX*)0);
+	assert(context != static_cast<HL_SHA256_CTX*>(0));
 
 	/* If no digest buffer is passed, we don't bother doing this: */
-	if (digest != (sha2_byte*)0) {
+	if (digest != static_cast<sha2_byte*>(0)) {
 		usedspace = (context->bitcount >> 3) % SHA256_BLOCK_LENGTH;
 #if BYTE_ORDER == LITTLE_ENDIAN
 		/* Convert FROM host byte order */
@@ -461,9 +461,9 @@ char* SHA256::SHA256_End(HL_SHA256_CTX* context, char buffer[]) {
 	int		i;
 
 	/* Sanity check: */
-	assert(context != (HL_SHA256_CTX*)0);
+	assert(context != static_cast<HL_SHA256_CTX*>(0));
 
-	if (buffer != (char*)0) {
+	if (buffer != static_cast<char*>(0)) {
 		SHA256_Final(digest, context);
 
 		for (i = 0; i < SHA256_DIGEST_LENGTH; i++) {
@@ -471,7 +471,7 @@ char* SHA256::SHA256_End(HL_SHA256_CTX* context, char buffer[]) {
 			*buffer++ = sha2_hex_digits[*d & 0x0f];
 			d++;
 		}
-		*buffer = (char)0;
+		*buffer = static_cast<char>(0);
 	} else {
 		MEMSET_BZERO(context, sizeof(context));
 	}
